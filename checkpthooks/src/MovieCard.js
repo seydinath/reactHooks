@@ -1,8 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MovieCard({ movie }) {
   const [flipped, setFlipped] = useState(false);
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
+
+  // Redirection vers la page de détail au clic sur la carte (hors boutons)
+  const handleCardClick = (e) => {
+    // Si le clic est sur un bouton, ne pas naviguer
+    if (e.target.tagName === "BUTTON" || e.target.tagName === "A") return;
+    navigate(`/movie/${movie.id}`);
+  };
 
   return (
     <div
@@ -15,7 +24,7 @@ function MovieCard({ movie }) {
       }}
     >
       <div
-        onClick={() => setFlipped(f => !f)}
+        onClick={handleCardClick}
         style={{
           transition: "transform 0.7s cubic-bezier(.4,2,.6,1)",
           transformStyle: "preserve-3d",
@@ -28,7 +37,7 @@ function MovieCard({ movie }) {
             ? "0 8px 32px 0 #6366f1bb"
             : "0 2px 12px 0 #6366f133"
         }}
-        title="Click to flip for more info!"
+        title="Click to view details!"
       >
         {/* Front Side */}
         <div
@@ -102,11 +111,12 @@ function MovieCard({ movie }) {
               {liked ? "💚" : "🤍"}
             </button>
             <div style={{ fontSize: "0.85rem", marginTop: "0.7rem", color: "#64748b" }}>
-              <em>Click card for details</em>
+              <em>Cliquez pour voir la description et la bande-annonce</em>
             </div>
           </div>
         </div>
-        {/* Back Side */}
+        {/* Back Side (optionnel, peut être retiré si navigation directe) */}
+        {/*
         <div
           style={{
             position: "absolute",
@@ -170,6 +180,7 @@ function MovieCard({ movie }) {
             Back
           </button>
         </div>
+        */}
       </div>
     </div>
   );
